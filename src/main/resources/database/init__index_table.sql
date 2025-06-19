@@ -1,0 +1,3 @@
+CREATE INDEX idx_rule_definition_type ON rule_definition(type);
+CREATE INDEX idx_rule_condition_group_rule ON rule_condition_group(rule_definition_id);
+CREATE INDEX idx_rule_condition_group_parent ON rule_condition_group(parent_group_id);

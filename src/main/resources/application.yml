@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: spring-boot-drools-service
+  messages:
+    basename: messages
+    encoding: UTF-8
+
+  datasource:
+    url: jdbc:postgresql://${ENV_DB_HOST:localhost}:${ENV_DB_PORT:5432}/${ENV_DB_NAME:rules}?currentSchema=${ENV_DB_SCHEMA:matchlent-db}&useUnicode=true&sslmode=disable&serverTimezone=UTC
+    username: ${ENV_DB_USERNAME:postgres}
+    password: ${ENV_DB_PASSWORD:123}
+    driver-class-name: org.postgresql.Driver
+
+  devtools:
+    restart:
+      enabled: false
+
