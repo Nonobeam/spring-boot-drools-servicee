@@ -1,10 +1,15 @@
 package per.nonobeam.rules.web.repository;
 
+import java.util.List;
+import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import per.nonobeam.rules.web.model.core.RuleTemplateVersion;
 
-import java.util.UUID;
-
 @Repository
-public interface RuleTemplateVersionRepository extends JpaRepository<RuleTemplateVersion, UUID> {}
+public interface RuleTemplateVersionRepository extends JpaRepository<RuleTemplateVersion, UUID> {
+
+  @Query("SELECT r.content FROM RuleTemplateVersion r WHERE r.isActive = true")
+  List<String> findActiveDRLs();
+}

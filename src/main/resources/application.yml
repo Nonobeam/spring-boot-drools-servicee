@@ -15,3 +15,8 @@ spring:
     restart:
       enabled: false
 
+  data:
+    redis:
+      database: 0
+      host: ${ENV_REDIS_HOST:localhost}
+      port: ${ENV_REDIS_PORT:6379}
