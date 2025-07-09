@@ -1,5 +1,6 @@
 package per.nonobeam.rules.config;
 
+import java.util.List;
 import org.drools.core.event.DebugAgendaEventListener;
 import org.drools.core.event.DebugRuleRuntimeEventListener;
 import org.drools.ruleunits.api.conf.RuleConfig;
@@ -7,8 +8,6 @@ import org.kie.api.event.rule.AgendaEventListener;
 import org.kie.api.event.rule.RuleRuntimeEventListener;
 import org.kie.internal.event.rule.RuleEventListener;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.List;
 
 @Configuration
 public class CustomRuleConfig implements RuleConfig {

@@ -1,48 +1,54 @@
 package per.nonobeam.rules.web.model.core;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import per.nonobeam.rules.events.listeners.RuleDefinitionListener;
 
-@Getter
-@Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "rule_definition")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EntityListeners(RuleDefinitionListener.class)
 public class RuleDefinition {
-    @Id
-    private UUID id;
 
-    private String name;
-    private String type;
-    private String action;
-    private int priority;
+  @Id private UUID id;
 
-    @Column(name = "effective_start")
-    private LocalDateTime effectiveStart;
+  private String externalId;
 
-    @Column(name = "effective_end")
-    private LocalDateTime effectiveEnd;
+  private String name;
 
-    private String status;
+  private String type;
 
-    @ManyToOne
-    @JoinColumn(name = "template_version_id")
-    private RuleTemplateVersion templateVersion;
+  private String action;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+  private int priority;
+
+  private LocalDateTime effectiveStart;
+
+  private LocalDateTime effectiveEnd;
+
+  @Enumerated(EnumType.STRING)
+  private RuleStatus status;
+
+  @ManyToOne
+  @JoinColumn(name = "template_version_id", nullable = false)
+  private RuleTemplateVersion templateVersion;
+
+  private LocalDateTime createdAt;
+
+  private LocalDateTime updatedAt;
 }
