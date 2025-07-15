@@ -8,6 +8,9 @@ A modular, extensible Drools-based rule engine (now branded as Apache Kie) desig
 ## Architecture Overview
 ![Architecture Diagram](drools-service.png)
 
+## Database Schema
+![Database Diagram](database.png)
+
 ## ✅ Core Features
 
 ### Rule Execution Engine
