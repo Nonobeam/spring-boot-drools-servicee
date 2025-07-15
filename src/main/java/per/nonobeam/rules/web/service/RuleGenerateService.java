@@ -13,15 +13,28 @@ import per.nonobeam.rules.web.model.core.DataType;
 import per.nonobeam.rules.web.model.core.Operator;
 import per.nonobeam.rules.web.model.core.RuleCondition;
 import per.nonobeam.rules.web.model.core.RuleConditionGroup;
+import per.nonobeam.rules.web.model.core.RuleDefinition;
 import per.nonobeam.rules.web.repository.RuleConditionGroupRepository;
 import per.nonobeam.rules.web.repository.RuleConditionRepository;
+import per.nonobeam.rules.web.repository.RuleTemplateVersionRepository;
 
 @Service
 @RequiredArgsConstructor
-public class RuleConditionService {
+public class RuleGenerateService {
 
-  private final RuleConditionGroupRepository ruleConditionGroupRepository;
   private final RuleConditionRepository ruleConditionRepository;
+  private final RuleTemplateVersionRepository ruleTemplateVersionRepository;
+  private final RuleConditionGroupRepository ruleConditionGroupRepository;
+
+  public String generateRule(RuleDefinition rule) {
+    String template = rule.getTemplateVersion().getContent();
+    String conditions = generateConditions(rule.getId());
+
+    return template
+            .replace("${name}", rule.getName())
+            .replace("${priority}", String.valueOf(rule.getPriority()))
+            .replace("${conditions}", conditions);
+  }
 
   public String generateConditions(UUID ruleDefinitionId) {
     List<RuleConditionGroup> groups =
@@ -85,7 +98,7 @@ public class RuleConditionService {
   private String convertOperand(String operand, DataType dataType, boolean isLeft) {
     return switch (dataType) {
       case STR -> isLeft ? attribute(operand) : "\"" + operand + "\"";
-      case NUM -> isLeft ? "Long.parseLong((String) " + attribute(operand) + ")" : operand + "L";
+      case NUM -> isLeft ? " ((Number) " + attribute(operand) + ").longValue()" : operand + "L";
       case BOOL, VAR -> isLeft ? attribute(operand) : operand;
     };
   }

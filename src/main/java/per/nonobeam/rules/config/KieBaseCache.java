@@ -19,8 +19,8 @@ public class KieBaseCache {
     return cache.computeIfAbsent(externalId, id -> supplier.get());
   }
 
-  public void put(String externalId, KieBase base) {
-    cache.put(externalId, base);
+  public KieBase put(String externalId, KieBase base) {
+    return cache.put(externalId, base);
   }
 
   public void clear(String externalId) {

@@ -12,6 +12,7 @@ import lombok.Setter;
 @Setter
 public class CreateRuleDefinitionRequest {
 
+  // use to define the id author's organization
   @NotBlank private String externalId;
 
   @NotBlank private String name;

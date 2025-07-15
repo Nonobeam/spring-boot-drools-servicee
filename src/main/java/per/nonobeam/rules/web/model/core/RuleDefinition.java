@@ -22,7 +22,7 @@ import per.nonobeam.rules.events.listeners.RuleDefinitionListener;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EntityListeners(RuleDefinitionListener.class)
+//@EntityListeners(RuleDefinitionListener.class)
 public class RuleDefinition {
 
   @Id private UUID id;
