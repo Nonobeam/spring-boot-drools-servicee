@@ -1,6 +1,7 @@
 package per.nonobeam.rules.web.repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +18,6 @@ public interface RuleDefinitionRepository extends JpaRepository<RuleDefinition, 
     WHERE rd.status = 'ACTIVE'
     """)
   List<RuleDefinition> findActiveRulesWithTemplate();
+
+  Optional<RuleDefinition> findByExternalId(String externalId);
 }

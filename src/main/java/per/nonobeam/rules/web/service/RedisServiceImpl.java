@@ -13,14 +13,14 @@ public class RedisServiceImpl implements RedisService {
   private static final String RULE_KEY_PREFIX = "drools:eligibility:shop:";
 
   @Override
-  public void cacheEligibilityRuleScript(String shopId, String ruleScript) {
-    String key = RULE_KEY_PREFIX + shopId;
+  public void cacheEligibilityRuleScript(String externalId, String ruleScript) {
+    String key = RULE_KEY_PREFIX + externalId;
     redisTemplate.opsForValue().set(key, ruleScript);
   }
 
   @Override
-  public String getEligibilityRuleScript(String shopId) {
-    String key = RULE_KEY_PREFIX + shopId;
+  public String getEligibilityRuleScript(String externalId) {
+    String key = RULE_KEY_PREFIX + externalId;
     return redisTemplate.opsForValue().get(key);
   }
 }

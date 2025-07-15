@@ -13,4 +13,6 @@ public interface RuleConditionRepository extends JpaRepository<RuleCondition, UU
 
   @Query("SELECT c FROM RuleCondition c WHERE c.group.id IN :groupIds")
   List<RuleCondition> findByGroupIds(@Param("groupIds") List<UUID> groupIds);
+
+  List<RuleCondition> findByGroupIdIn(List<UUID> groupIds);
 }
