@@ -6,15 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
-import org.drools.ruleunits.impl.RuleUnitProviderImpl;
-import org.kie.api.KieBase;
-import org.kie.api.io.ResourceType;
-import org.kie.internal.utils.KieHelper;
 import org.springframework.stereotype.Service;
-import per.nonobeam.rules.EligibilityUnit;
-import per.nonobeam.rules.config.KieBaseCache;
 import per.nonobeam.rules.web.model.core.ConditionOperator;
 import per.nonobeam.rules.web.model.core.DataType;
 import per.nonobeam.rules.web.model.core.Operator;
@@ -39,7 +32,6 @@ import per.nonobeam.rules.web.repository.RuleTemplateVersionRepository;
 @RequiredArgsConstructor
 public class RuleDefinitionService {
 
-  private final KieBaseCache kieBaseCache;
   private final RedisService redisService;
   private final RuleGenerateService ruleGenerateService;
   private final RuleConditionRepository conditionRepository;
@@ -51,18 +43,18 @@ public class RuleDefinitionService {
     RuleDefinition ruleDefinition = saveRuleDefinitionEntity(request);
     List<RuleConditionGroup> savedGroups = saveConditionGroupsRecursive(request, ruleDefinition);
     cacheRuleDefinition(ruleDefinition);
-    List<ConditionGroupResponse> groupResponses = savedGroups.stream()
-            .map(ConditionGroupResponse::from)
-            .toList();
+    List<ConditionGroupResponse> groupResponses =
+        savedGroups.stream().map(ConditionGroupResponse::from).toList();
 
     return RuleDefinitionResponse.mapToResponse(ruleDefinition, groupResponses);
   }
 
   private RuleDefinition saveRuleDefinitionEntity(CreateRuleDefinitionRequest request) {
     RuleTemplateVersion version =
-            templateVersionRepository.findById(request.getTemplateVersionId()).orElseThrow();
+        templateVersionRepository.findById(request.getTemplateVersionId()).orElseThrow();
 
-    RuleDefinition ruleDefinition = RuleDefinition.builder()
+    RuleDefinition ruleDefinition =
+        RuleDefinition.builder()
             .id(UUID.randomUUID())
             .externalId(request.getExternalId())
             .name(request.getName())
@@ -83,9 +75,7 @@ public class RuleDefinitionService {
   }
 
   private List<RuleConditionGroup> saveConditionGroupsRecursive(
-          CreateRuleDefinitionRequest request,
-          RuleDefinition ruleDefinition
-  ) {
+      CreateRuleDefinitionRequest request, RuleDefinition ruleDefinition) {
     if (request.getConditionGroups() == null) return List.of();
 
     List<RuleConditionGroup> result = new ArrayList<>();
@@ -97,31 +87,29 @@ public class RuleDefinitionService {
   }
 
   private RuleConditionGroup saveGroupRecursive(
-          ConditionGroupRequest request, RuleConditionGroup parent, RuleDefinition rule) {
+      ConditionGroupRequest request, RuleConditionGroup parent, RuleDefinition rule) {
 
     RuleConditionGroup group =
-            RuleConditionGroup.builder()
-                    .id(UUID.randomUUID())
-                    .ruleDefinition(rule)
-                    .parentGroup(parent)
-                    .operator(Operator.valueOf(request.getOperator()))
-                    .groupOrder(request.getGroupOrder())
-                    .build();
+        RuleConditionGroup.builder()
+            .id(UUID.randomUUID())
+            .ruleDefinition(rule)
+            .parentGroup(parent)
+            .operator(Operator.valueOf(request.getOperator()))
+            .build();
 
     conditionGroupRepository.save(group);
 
     if (request.getConditions() != null) {
       for (ConditionRequest cond : request.getConditions()) {
         RuleCondition condition =
-                RuleCondition.builder()
-                        .id(UUID.randomUUID())
-                        .group(group)
-                        .leftOperand(cond.getLeftOperand())
-                        .operator(ConditionOperator.valueOf(cond.getOperator()))
-                        .rightOperand(cond.getRightOperand())
-                        .dataType(DataType.valueOf(cond.getDataType()))
-                        .conditionOrder(cond.getConditionOrder())
-                        .build();
+            RuleCondition.builder()
+                .id(UUID.randomUUID())
+                .group(group)
+                .leftOperand(cond.getLeftOperand())
+                .operator(ConditionOperator.valueOf(cond.getOperator()))
+                .rightOperand(cond.getRightOperand())
+                .dataType(DataType.valueOf(cond.getDataType()))
+                .build();
         if (group.getConditions() == null) {
           group.setConditions(new ArrayList<>());
         }
@@ -146,41 +134,12 @@ public class RuleDefinitionService {
 
   public void cacheStringRuleDefinition(String externalId, String script) {
     redisService.cacheEligibilityRuleScript(externalId, script);
-    KieBase base = new KieHelper().addContent(script, ResourceType.DRL).build();
-    kieBaseCache.put(externalId, base);
   }
 
   public List<RuleListResponse> list() {
     return ruleDefinitionRepository.findAll().stream()
-            .map(RuleListResponse::fromRuleDefinition)
-            .collect(Collectors.toList());
-  }
-
-  public RuleDefinitionResponse getRuleDefinition(String externalId) {
-    RuleDefinition rule = ruleDefinitionRepository.findByExternalId(externalId)
-            .orElseThrow(() -> new IllegalArgumentException("Rule not found for external ID: " + externalId));
-
-    List<RuleConditionGroup> groups = conditionGroupRepository.findByRuleDefinitionId(rule.getId());
-    List<UUID> groupIds = groups.stream().map(RuleConditionGroup::getId).toList();
-    List<RuleCondition> conditions = conditionRepository.findByGroupIdIn(groupIds);
-
-    Map<UUID, List<RuleCondition>> groupToConditions = conditions.stream()
-            .collect(Collectors.groupingBy(cond -> cond.getGroup().getId()));
-
-    List<ConditionGroupResponse> groupResponses = groups.stream()
-            .map(group -> new ConditionGroupResponse(
-                    group.getId(),
-                    group.getParentGroup() != null ? group.getParentGroup().getId() : null,
-                    group.getOperator(),
-                    group.getGroupOrder(),
-                    groupToConditions.getOrDefault(group.getId(), List.of())
-                            .stream()
-                            .map(RuleConditionResponse::from)
-                            .toList()
-            ))
-            .toList();
-
-    return RuleDefinitionResponse.mapToResponse(rule, groupResponses);
+        .map(RuleListResponse::fromRuleDefinition)
+        .collect(Collectors.toList());
   }
 
   public RuleDefinitionResponse getRuleDefinition(UUID id) {
@@ -190,27 +149,29 @@ public class RuleDefinitionService {
     List<UUID> groupIds = groups.stream().map(RuleConditionGroup::getId).toList();
     List<RuleCondition> conditions = conditionRepository.findByGroupIdIn(groupIds);
 
-    Map<UUID, List<RuleCondition>> groupToConditions = conditions.stream()
-            .collect(Collectors.groupingBy(cond -> cond.getGroup().getId()));
+    Map<UUID, List<RuleCondition>> groupToConditions =
+        conditions.stream().collect(Collectors.groupingBy(cond -> cond.getGroup().getId()));
 
-    List<ConditionGroupResponse> groupResponses = groups.stream()
-            .map(group -> new ConditionGroupResponse(
-                    group.getId(),
-                    group.getParentGroup() != null ? group.getParentGroup().getId() : null,
-                    group.getOperator(),
-                    group.getGroupOrder(),
-                    groupToConditions.getOrDefault(group.getId(), List.of())
-                            .stream()
+    List<ConditionGroupResponse> groupResponses =
+        groups.stream()
+            .map(
+                group ->
+                    new ConditionGroupResponse(
+                        group.getId(),
+                        group.getParentGroup() != null ? group.getParentGroup().getId() : null,
+                        group.getOperator(),
+                        groupToConditions.getOrDefault(group.getId(), List.of()).stream()
                             .map(RuleConditionResponse::from)
-                            .toList()
-            ))
+                            .toList()))
             .toList();
 
     return RuleDefinitionResponse.mapToResponse(rule, groupResponses);
   }
 
   public RuleDefinition getRuleDefinitionEntity(String externalId) {
-    return ruleDefinitionRepository.findByExternalId(externalId)
-            .orElseThrow(() -> new IllegalArgumentException("Rule not found for external ID: " + externalId));
+    return ruleDefinitionRepository
+        .findByExternalId(externalId)
+        .orElseThrow(
+            () -> new IllegalArgumentException("Rule not found for external ID: " + externalId));
   }
 }

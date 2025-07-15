@@ -46,10 +46,7 @@ public class SecurityConfig {
       throws Exception {
     http.csrf(AbstractHttpConfigurer::disable)
         .cors(cors -> cors.configurationSource(corsConfigurationSource))
-        .authorizeHttpRequests(
-            auth ->
-                auth.requestMatchers(ALLOW_ENDPOINTS)
-                    .permitAll());
+        .authorizeHttpRequests(auth -> auth.requestMatchers(ALLOW_ENDPOINTS).permitAll());
 
     return http.build();
   }

@@ -1,6 +1,8 @@
 package per.nonobeam.rules.web.controller;
 
 import jakarta.validation.Valid;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +18,6 @@ import per.nonobeam.rules.web.model.response.RuleDefinitionResponse;
 import per.nonobeam.rules.web.model.response.RuleListResponse;
 import per.nonobeam.rules.web.service.EligibilityService;
 import per.nonobeam.rules.web.service.RuleDefinitionService;
-
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/rules")
@@ -45,11 +44,11 @@ public class RuleDefinitionController {
     return response != null ? ResponseEntity.ok(response) : ResponseEntity.notFound().build();
   }
 
-//  @GetMapping("/definition")
-//  public ResponseEntity<RuleDefinitionResponse> getRuleDefinition(String externalId) {
-//    RuleDefinitionResponse response = service.getRuleDefinition(externalId);
-//    return response != null ? ResponseEntity.ok(response) : ResponseEntity.notFound().build();
-//  }
+  //  @GetMapping("/definition")
+  //  public ResponseEntity<RuleDefinitionResponse> getRuleDefinition(String externalId) {
+  //    RuleDefinitionResponse response = service.getRuleDefinition(externalId);
+  //    return response != null ? ResponseEntity.ok(response) : ResponseEntity.notFound().build();
+  //  }
 
   @PostMapping("/evaluate")
   public ResponseEntity<String> handleEvent(@Valid @RequestBody IncomingEvent request) {

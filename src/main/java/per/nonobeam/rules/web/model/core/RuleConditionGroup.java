@@ -11,7 +11,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -48,8 +47,10 @@ public class RuleConditionGroup {
   @Enumerated(EnumType.STRING)
   private Operator operator;
 
-  private int groupOrder;
-
-  @OneToMany(mappedBy = "group", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(
+      mappedBy = "group",
+      fetch = FetchType.LAZY,
+      cascade = CascadeType.ALL,
+      orphanRemoval = true)
   private List<RuleCondition> conditions = new ArrayList<>();
 }

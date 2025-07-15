@@ -1,5 +1,6 @@
 package per.nonobeam.rules.web.service;
 
+import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kie.api.KieServices;
@@ -11,8 +12,6 @@ import org.springframework.stereotype.Service;
 import per.nonobeam.rules.EligibilityUnit;
 import per.nonobeam.rules.web.model.core.RuleDefinition;
 import per.nonobeam.rules.web.model.request.IncomingEvent;
-
-import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Service
@@ -30,12 +29,14 @@ public class EligibilityService {
       log.error("No rule script found for externalId: {}", externalId);
       RuleDefinition ruleDefinition = ruleDefinitionService.getRuleDefinitionEntity(externalId);
       ruleScript = ruleGenerateService.generateRule(ruleDefinition);
+      redisService.cacheEligibilityRuleScript(externalId, ruleScript);
     }
 
     KieServices ks = KieServices.Factory.get();
     KieFileSystem kfs = ks.newKieFileSystem();
-    kfs.write("src/main/resources/rule_" + externalId + ".drl",
-            ResourceFactory.newByteArrayResource(ruleScript.getBytes(StandardCharsets.UTF_8)));
+    kfs.write(
+        "src/main/resources/rule_" + externalId + ".drl",
+        ResourceFactory.newByteArrayResource(ruleScript.getBytes(StandardCharsets.UTF_8)));
     ks.newKieBuilder(kfs).buildAll();
     KieContainer kc = ks.newKieContainer(ks.getRepository().getDefaultReleaseId());
 

@@ -37,6 +37,4 @@ public class RuleCondition {
 
   @Enumerated(EnumType.STRING)
   private DataType dataType;
-
-  private int conditionOrder;
 }

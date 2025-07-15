@@ -1,7 +1,6 @@
 package per.nonobeam.rules.web.model.core;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
@@ -14,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import per.nonobeam.rules.events.listeners.RuleDefinitionListener;
 
 @Entity
 @Table(name = "rule_definition")
@@ -22,7 +20,7 @@ import per.nonobeam.rules.events.listeners.RuleDefinitionListener;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-//@EntityListeners(RuleDefinitionListener.class)
+// @EntityListeners(RuleDefinitionListener.class)
 public class RuleDefinition {
 
   @Id private UUID id;

@@ -5,19 +5,12 @@ import per.nonobeam.rules.web.model.core.DataType;
 import per.nonobeam.rules.web.model.core.RuleCondition;
 
 public record RuleConditionResponse(
-    String leftOperand,
-    ConditionOperator operator,
-    String rightOperand,
-    DataType dataType,
-    int conditionOrder
-) {
+    String leftOperand, ConditionOperator operator, String rightOperand, DataType dataType) {
   public static RuleConditionResponse from(RuleCondition condition) {
     return new RuleConditionResponse(
         condition.getLeftOperand(),
         condition.getOperator(),
         condition.getRightOperand(),
-        condition.getDataType(),
-        condition.getConditionOrder()
-    );
+        condition.getDataType());
   }
 }

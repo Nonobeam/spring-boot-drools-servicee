@@ -7,6 +7,4 @@ CREATE TABLE rule_condition (
 
     right_operand VARCHAR(100) NOT NULL,
     data_type VARCHAR(20) NOT NULL,
-
-    condition_order INT NOT NULL
 );
