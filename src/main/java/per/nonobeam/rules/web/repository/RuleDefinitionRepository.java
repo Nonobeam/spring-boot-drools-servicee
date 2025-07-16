@@ -8,5 +8,6 @@ import per.nonobeam.rules.web.model.core.RuleDefinition;
 
 @Repository
 public interface RuleDefinitionRepository extends JpaRepository<RuleDefinition, UUID> {
+
   Optional<RuleDefinition> findByExternalId(String externalId);
 }

@@ -18,7 +18,7 @@ import per.nonobeam.rules.web.repository.RuleConditionRepository;
 
 @Service
 @RequiredArgsConstructor
-public class RuleGenerateService {
+public class RuleGenerateService implements RuleGenerate {
 
   private final RuleConditionRepository ruleConditionRepository;
   private final RuleConditionGroupRepository ruleConditionGroupRepository;
@@ -33,7 +33,7 @@ public class RuleGenerateService {
         .replace("${conditions}", conditions);
   }
 
-  public String generateConditions(UUID ruleDefinitionId) {
+  private String generateConditions(UUID ruleDefinitionId) {
     List<RuleConditionGroup> groups =
         ruleConditionGroupRepository.findByRuleDefinitionId(ruleDefinitionId);
     Map<UUID, List<RuleCondition>> conditionsMap =

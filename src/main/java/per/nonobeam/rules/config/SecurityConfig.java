@@ -18,24 +18,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 public class SecurityConfig {
 
   private final String[] ALLOW_ENDPOINTS = {
-    "/v2/api-docs/**",
-    "/v3/api-docs",
-    "/v3/**",
-    "/swagger-ui/**",
-    "/swagger-ui.html",
-    "/swagger-resources",
-    "/swagger-resources/**",
-    "/swagger-ui/index.html#/**",
-    "/swagger-ui/index.html/**",
-    "/actuator/**",
-    "/favicon.ico",
-    "/login",
-    "/index.html",
-    "/assets/**",
-    "/vite.svg",
-    "/api/auth/**",
-    "/api/auth/login",
-    "/error",
     "/**"
   };
 

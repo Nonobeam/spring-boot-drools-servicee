@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-// @EntityListeners(RuleDefinitionListener.class)
 public class RuleDefinition {
 
   @Id private UUID id;

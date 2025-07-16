@@ -32,8 +32,6 @@ import per.nonobeam.rules.web.repository.RuleTemplateVersionRepository;
 @RequiredArgsConstructor
 public class RuleDefinitionService {
 
-  private final RedisService redisService;
-  private final RuleGenerateService ruleGenerateService;
   private final RuleConditionRepository conditionRepository;
   private final RuleDefinitionRepository ruleDefinitionRepository;
   private final RuleConditionGroupRepository conditionGroupRepository;
@@ -42,7 +40,6 @@ public class RuleDefinitionService {
   public RuleDefinitionResponse create(CreateRuleDefinitionRequest request) {
     RuleDefinition ruleDefinition = saveRuleDefinitionEntity(request);
     List<RuleConditionGroup> savedGroups = saveConditionGroupsRecursive(request, ruleDefinition);
-    cacheRuleDefinition(ruleDefinition);
     List<ConditionGroupResponse> groupResponses =
         savedGroups.stream().map(ConditionGroupResponse::from).toList();
 
@@ -125,15 +122,6 @@ public class RuleDefinitionService {
     }
 
     return group;
-  }
-
-  public void cacheRuleDefinition(RuleDefinition rule) {
-    String script = ruleGenerateService.generateRule(rule);
-    cacheStringRuleDefinition(rule.getExternalId(), script);
-  }
-
-  public void cacheStringRuleDefinition(String externalId, String script) {
-    redisService.cacheEligibilityRuleScript(externalId, script);
   }
 
   public List<RuleListResponse> list() {
