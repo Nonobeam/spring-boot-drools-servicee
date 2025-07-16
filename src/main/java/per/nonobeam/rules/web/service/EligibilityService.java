@@ -13,9 +13,6 @@ public class EligibilityService {
   private final RuleExecutionGateway gateway;
 
   public EligibilityUnit evaluate(IncomingEvent event) {
-    return gateway
-            .with(event)
-            .register(new Object(), new Object())
-            .run();
+    return gateway.with(event).register(new Object(), new Object()).run();
   }
 }

@@ -18,10 +18,9 @@ public class RuleEngineAutoConfiguration {
   @Bean
   @ConditionalOnMissingBean
   public RuleScriptResolver ruleScriptResolver(
-          RedisService redisService,
-          RuleDefinitionService ruleDefinitionService,
-          RuleGenerate ruleGenerate
-  ) {
+      RedisService redisService,
+      RuleDefinitionService ruleDefinitionService,
+      RuleGenerate ruleGenerate) {
     return new RuleScriptRedisResolver(redisService, ruleGenerate, ruleDefinitionService);
   }
 

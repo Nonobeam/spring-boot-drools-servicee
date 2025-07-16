@@ -14,8 +14,6 @@ public class ConditionGroupRequest {
 
   @NotBlank private String operator; // AND, OR, NOT
 
-  @NotNull private Integer groupOrder;
-
   @NotNull private List<ConditionRequest> conditions;
 
   private List<ConditionGroupRequest> subGroups;

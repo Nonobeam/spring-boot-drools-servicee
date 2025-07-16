@@ -1,16 +1,16 @@
 package per.nonobeam.rules.evaluate;
 
+import static per.nonobeam.rules.web.model.core.ExternalConstant.EXTERNAL_ID;
+
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import per.nonobeam.rules.EligibilityUnit;
 import per.nonobeam.rules.evaluate.executor.RuleEngineExecutor;
 import per.nonobeam.rules.evaluate.resolver.RuleScriptResolver;
-import static per.nonobeam.rules.web.model.core.ExternalConstant.EXTERNAL_ID;
 import per.nonobeam.rules.web.model.request.IncomingEvent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -35,7 +35,8 @@ public class RuleExecutionGateway {
     private String ruleScript;
     private EligibilityUnit result;
 
-    public RuleExecutionFlow(IncomingEvent event, RuleScriptResolver resolver, RuleEngineExecutor executor) {
+    public RuleExecutionFlow(
+        IncomingEvent event, RuleScriptResolver resolver, RuleEngineExecutor executor) {
       this.event = event;
       this.resolver = resolver;
       this.executor = executor;
@@ -47,10 +48,7 @@ public class RuleExecutionGateway {
     }
 
     public EligibilityUnit run() {
-      return this
-          .resolve()
-          .execute( )
-          .result();
+      return this.resolve().execute().result();
     }
 
     public RuleExecutionFlow resolve() {

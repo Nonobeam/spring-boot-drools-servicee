@@ -15,6 +15,4 @@ public class ConditionRequest {
   @NotBlank private String rightOperand;
 
   @NotBlank private String dataType; // string, number, boolean, variable
-
-  @NotNull private Integer conditionOrder;
 }

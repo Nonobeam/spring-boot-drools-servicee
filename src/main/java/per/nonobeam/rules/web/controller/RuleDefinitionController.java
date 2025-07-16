@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import per.nonobeam.rules.EligibilityUnit;
 import per.nonobeam.rules.web.model.request.CreateRuleDefinitionRequest;
 import per.nonobeam.rules.web.model.request.IncomingEvent;
+import per.nonobeam.rules.web.model.request.ListCreateRuleDefinitionRequest;
 import per.nonobeam.rules.web.model.response.RuleDefinitionResponse;
 import per.nonobeam.rules.web.model.response.RuleListResponse;
 import per.nonobeam.rules.web.service.EligibilityService;
@@ -31,6 +32,12 @@ public class RuleDefinitionController {
   public ResponseEntity<RuleDefinitionResponse> create(
       @Valid @RequestBody CreateRuleDefinitionRequest request) {
     return ResponseEntity.ok(service.create(request));
+  }
+
+  @PostMapping("/multi/create")
+  public ResponseEntity<List<RuleDefinitionResponse>> create(
+      @Valid @RequestBody ListCreateRuleDefinitionRequest request) {
+    return ResponseEntity.ok(service.createAll(request));
   }
 
   @GetMapping("/list")

@@ -1,5 +1,6 @@
 package per.nonobeam.rules.web.service;
 
+import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import per.nonobeam.rules.web.model.core.RuleTemplateVersion;
 import per.nonobeam.rules.web.model.request.ConditionGroupRequest;
 import per.nonobeam.rules.web.model.request.ConditionRequest;
 import per.nonobeam.rules.web.model.request.CreateRuleDefinitionRequest;
+import per.nonobeam.rules.web.model.request.ListCreateRuleDefinitionRequest;
 import per.nonobeam.rules.web.model.response.ConditionGroupResponse;
 import per.nonobeam.rules.web.model.response.RuleConditionResponse;
 import per.nonobeam.rules.web.model.response.RuleDefinitionResponse;
@@ -37,6 +39,12 @@ public class RuleDefinitionService {
   private final RuleConditionGroupRepository conditionGroupRepository;
   private final RuleTemplateVersionRepository templateVersionRepository;
 
+  @Transactional
+  public List<RuleDefinitionResponse> createAll(ListCreateRuleDefinitionRequest requests) {
+    return requests.getRules().stream().map(this::create).collect(Collectors.toList());
+  }
+
+  @Transactional
   public RuleDefinitionResponse create(CreateRuleDefinitionRequest request) {
     RuleDefinition ruleDefinition = saveRuleDefinitionEntity(request);
     List<RuleConditionGroup> savedGroups = saveConditionGroupsRecursive(request, ruleDefinition);

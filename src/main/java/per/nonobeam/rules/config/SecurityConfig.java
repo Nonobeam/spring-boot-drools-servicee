@@ -17,9 +17,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final String[] ALLOW_ENDPOINTS = {
-    "/**"
-  };
+  private final String[] ALLOW_ENDPOINTS = {"/**"};
 
   @Bean
   public SecurityFilterChain defaultSecuredFilterChain(
